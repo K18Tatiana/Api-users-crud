@@ -2,7 +2,7 @@ const catchError = require('../utils/catchError');
 const User = require('../models/User');
 
 const getAll = catchError(async(req, res) => {
-    const user = await User.findAll();
+    const users = await User.findAll();
     return res.json(user);
 });
 const create = catchError(async(req, res) => {
@@ -15,12 +15,14 @@ const create = catchError(async(req, res) => {
 const getOne = catchError(async(req, res) => {
     const { id } = req.params;
     const user = await User.findByPk( id );
+    if(!user) return res.status(404).json({ message: "User not found" });
     return res.json(user);
 });
 const remove = catchError(async(res, req) => {
     const { id } = req.params;
-    const user = await User.destroy({ where: { id } });
-    return sendStatus(204);
+    const usersDeleted = await User.destroy({ where: { id } });
+    if(usersDeleted === 0) return res.status(404).json({ message: "User not found" });
+    return res.sendStatus(204);
 });
 const update = catchError(async(res, req) => {
     const { id } = req.params;
@@ -29,6 +31,7 @@ const update = catchError(async(res, req) => {
         { first_name, last_name, email, password, birthday },
         { where: { id }, returning: true }
     );
+    if(user[0] === 0) return res.status(404).json({ message: "User not found" })
     return res.json(user[1][0]);
 });
 
