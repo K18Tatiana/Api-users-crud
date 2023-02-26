@@ -18,13 +18,13 @@ const getOne = catchError(async(req, res) => {
     if(!user) return res.status(404).json({ message: "User not found" });
     return res.json(user);
 });
-const remove = catchError(async(res, req) => {
+const remove = catchError(async(req, res) => {
     const { id } = req.params;
     const usersDeleted = await User.destroy({ where: { id } });
-    if(usersDeleted === 0) return res.status(404).json({ message: "User not found" });
+    //if(usersDeleted === 0) return res.status(404).json({ message: "User not found" });
     return res.sendStatus(204);
 });
-const update = catchError(async(res, req) => {
+const update = catchError(async(req, res) => {
     const { id } = req.params;
     const { first_name, last_name, email, password, birthday } = req.body;
     const user = await User.update(
