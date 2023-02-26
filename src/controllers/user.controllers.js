@@ -3,7 +3,7 @@ const User = require('../models/User');
 
 const getAll = catchError(async(req, res) => {
     const users = await User.findAll();
-    return res.json(user);
+    return res.json(users);
 });
 const create = catchError(async(req, res) => {
     const { first_name, last_name, email, password, birthday } = req.body;
